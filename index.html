@@ -1,74 +1,2643 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acessar Jogo</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <style>
-        body {
-            background: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        #container {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0px 4px 14px rgba(0,0,0,0.2);
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        #enter-btn {
-            margin-top: 20px;
-            padding: 14px 24px;
-            font-size: 18px;
-            border: none;
-            background: #007bff;
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        #enter-btn:hover {
-            background: #005dc1;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game ITIL & Metodologias Ágeis</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #4361ee;
+    --secondary: #3a0ca3;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --warning: #f8961e;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --background: #f5f7fa;
+    --easy: #4ade80;
+    --medium: #fbbf24;
+    --hard: #f87171;
+    --mode1: #4361ee;
+    --mode2: #7209b7;
+  }
+  
+  * {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    margin: 0;
+    padding: 15px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+  }
+  
+  #game {
+    background: white;
+    max-width: 850px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #game::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    z-index: 10;
+  }
+  
+  #welcomeMessage {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(76, 201, 240, 0.1));
+    border-radius: 12px;
+    border-left: 5px solid var(--primary);
+  }
+  
+  #welcomeMessage h1 {
+    color: var(--secondary);
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  #welcomeMessage p {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  #modeSelection {
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .mode-option {
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    transition: all 0.4s ease;
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mode-option::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.7s;
+  }
+  
+  .mode-option:hover::before {
+    left: 100%;
+  }
+  
+  .mode-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  
+  .mode1-option {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.15), rgba(76, 201, 240, 0.15));
+    border-color: var(--mode1);
+  }
+  
+  .mode2-option {
+    background: linear-gradient(135deg, rgba(114, 9, 183, 0.15), rgba(236, 72, 153, 0.15));
+    border-color: var(--mode2);
+  }
+  
+  .mode-description {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #666;
+    font-weight: normal;
+  }
+  
+  #characterArea {
+    background: linear-gradient(135deg, #e0e0e0, #f0f0f0);
+    height: 120px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 2px solid var(--primary);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+  
+  #character {
+    font-size: 70px;
+    position: absolute;
+    left: 10px;
+    transition: left 0.7s ease, transform 0.5s ease;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+  
+  .character-jump {
+    animation: jump 0.5s ease;
+  }
+  
+  @keyframes jump {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-15px) rotate(-5deg); }
+    75% { transform: translateY(-8px) rotate(5deg); }
+  }
+  
+  .character-celebrate {
+    animation: celebrate 0.8s ease infinite;
+  }
+  
+  @keyframes celebrate {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.08) rotate(-8deg); }
+    75% { transform: scale(1.08) rotate(8deg); }
+  }
+  
+  .character-sad {
+    animation: sad 0.5s ease;
+  }
+  
+  @keyframes sad {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px) rotate(5deg); }
+  }
+  
+  .character-thinking {
+    animation: thinking 1.2s ease-in-out infinite;
+  }
+  
+  @keyframes thinking {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.03); }
+  }
+  
+  #stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    background: var(--light);
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3px 6px;
+    min-width: 70px;
+  }
+  
+  .stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  
+  #score .stat-value {
+    color: var(--primary);
+  }
+  
+  #lives .stat-value {
+    color: var(--danger);
+  }
+  
+  #timer .stat-value {
+    color: var(--secondary);
+  }
+  
+  #streak .stat-value {
+    color: #10b981;
+  }
+  
+  .heart {
+    color: var(--danger);
+    margin: 0 1px;
+    font-size: 16px;
+    animation: heartbeat 1.5s infinite;
+  }
+  
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  
+  #progressBar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  #progress {
+    height: 100%;
+    background: linear-gradient(to right, var(--success), var(--primary));
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 4px;
+  }
+  
+  h2 {
+    color: var(--secondary);
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 22px;
+    margin-top: 3px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  #story-narrative {
+    font-size: 13px;
+    margin-bottom: 12px;
+    padding: 10px;
+    background: linear-gradient(to right, rgba(67, 97, 238, 0.1), rgba(76, 201, 240, 0.1));
+    border-radius: 6px;
+    border-left: 3px solid var(--primary);
+    font-style: italic;
+    display: none;
+    line-height: 1.3;
+  }
+  
+  #question {
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: var(--light);
+    border-radius: 10px;
+    border-left: 4px solid var(--primary);
+    line-height: 1.3;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+  }
+  
+  .difficulty-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  
+  .easy-tag {
+    background-color: var(--easy);
+    color: #166534;
+  }
+  
+  .medium-tag {
+    background-color: var(--medium);
+    color: #92400e;
+  }
+  
+  .hard-tag {
+    background-color: var(--hard);
+    color: #991b1b;
+  }
+  
+  #answers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .answer-btn {
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+    color: var(--dark);
+    font-size: 14px;
+    text-align: left;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .answer-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.7s;
+  }
+  
+  .answer-btn:hover::before {
+    left: 100%;
+  }
+  
+  .answer-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+    border-color: var(--primary);
+  }
+  
+  .answer-btn.correct {
+    background: var(--success);
+    color: white;
+    animation: pulse 0.5s;
+    border-color: #0ea5e9;
+  }
+  
+  .answer-btn.incorrect {
+    background: var(--danger);
+    color: white;
+    animation: shake 0.4s;
+    border-color: #db2777;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  
+  #feedback {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: none;
+    animation: fadeIn 0.5s;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  #feedback.correct {
+    background: rgba(76, 201, 240, 0.2);
+    border-left: 4px solid var(--success);
+  }
+  
+  #feedback.incorrect {
+    background: rgba(247, 37, 133, 0.2);
+    border-left: 4px solid var(--danger);
+  }
+  
+  #nextBtn, #startBtn, #reviewBtn, #difficultyBtn, #modeBtn, #backToModeBtn {
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.8px;
+  }
+  
+  #nextBtn:hover, #startBtn:hover, #reviewBtn:hover, #difficultyBtn:hover, #modeBtn:hover, #backToModeBtn:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  }
+  
+  #reviewBtn {
+    background: var(--warning);
+  }
+  
+  #reviewBtn:hover {
+    background: #e07c00;
+  }
+  
+  #difficultyBtn {
+    background: linear-gradient(to right, var(--easy), var(--medium), var(--hard));
+    display: none;
+  }
+  
+  #modeBtn {
+    background: linear-gradient(to right, var(--mode1), var(--mode2));
+    display: none;
+  }
+  
+  #backToModeBtn {
+    background: linear-gradient(to right, #666, #999);
+    display: none;
+  }
+  
+  #achievements {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    max-height: 50px;
+    overflow: hidden;
+  }
+  
+  .achievement {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  }
+  
+  .achievement.unlocked {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    animation: achievementUnlock 0.6s ease;
+  }
+  
+  @keyframes achievementUnlock {
+    0% { transform: scale(0.5) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(180deg); }
+    100% { transform: scale(1.08) rotate(360deg); }
+  }
+  
+  .achievement-tooltip {
+    position: absolute;
+    bottom: 40px;
+    background: var(--dark);
+    color: white;
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 100;
+  }
+  
+  .achievement:hover .achievement-tooltip {
+    opacity: 1;
+  }
+  
+  .level-indicator {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .mode-indicator {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .mode1-indicator {
+    background: linear-gradient(to right, var(--mode1), #3a56c4);
+  }
+  
+  .mode2-indicator {
+    background: linear-gradient(to right, var(--mode2), #9d4edd);
+  }
+  
+  .timer-warning {
+    animation: blink 0.8s infinite;
+    color: var(--danger) !important;
+  }
+  
+  .timer-critical {
+    animation: criticalBlink 0.5s infinite;
+    color: var(--danger) !important;
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes criticalBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .certificate {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    border: 5px double var(--primary);
+    border-radius: 12px;
+    background: #f9f9f9;
+    margin-top: 15px;
+    animation: fadeIn 0.8s;
+  }
+  
+  .certificate h3 {
+    color: var(--secondary);
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .certificate p {
+    font-size: 14px;
+    margin: 8px 0;
+  }
+  
+  .stars {
+    font-size: 28px;
+    margin: 12px 0;
+    animation: pulse 2s infinite;
+  }
+  
+  .final-message {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--light);
+  }
+  
+  .manager-ready {
+    background: rgba(76, 201, 240, 0.3);
+    border-left: 4px solid var(--success);
+  }
+  
+  .needs-improvement {
+    background: rgba(247, 37, 133, 0.2);
+    border-left: 4px solid var(--danger);
+  }
+  
+  .almost-ready {
+    background: rgba(248, 150, 30, 0.2);
+    border-left: 4px solid var(--warning);
+  }
+  
+  .streak-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(to right, #10b981, #34d399);
+    color: white;
+    padding: 4px 9px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 10;
+    animation: pulse 1.5s infinite;
+  }
+  
+  #difficultySelection {
+    display: none;
+    text-align: center;
+    margin: 12px 0;
+  }
+  
+  .difficulty-option {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .difficulty-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.12);
+  }
+  
+  .easy-option {
+    background-color: rgba(74, 222, 128, 0.2);
+    border-color: var(--easy);
+  }
+  
+  .medium-option {
+    background-color: rgba(251, 191, 36, 0.2);
+    border-color: var(--medium);
+  }
+  
+  .hard-option {
+    background-color: rgba(248, 113, 113, 0.2);
+    border-color: var(--hard);
+  }
+  
+  .difficulty-description {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #666;
+  }
+  
+  .countdown-sound {
+    display: none;
+  }
+  
+  .mode-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    gap: 5px;
+  }
+  
+  .mode-progress-item {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  
+  .mode-progress-item.active {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  .mode-progress-item.completed {
+    background: var(--success);
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+    
+    #game {
+      padding: 15px;
+      border-radius: 15px;
+    }
+    
+    #character {
+      font-size: 60px;
+    }
+    
+    #characterArea {
+      height: 100px;
+    }
+    
+    #question {
+      font-size: 15px;
+    }
+    
+    .answer-btn {
+      font-size: 13px;
+      padding: 10px;
+    }
+    
+    h2 {
+      font-size: 18px;
+    }
+    
+    .stat-value {
+      font-size: 18px;
+    }
+    
+    .stat-label {
+      font-size: 9px;
+    }
+    
+    #nextBtn, #startBtn, #reviewBtn, #difficultyBtn, #modeBtn, #backToModeBtn {
+      font-size: 14px;
+      padding: 10px;
+    }
+    
+    .certificate h3 {
+      font-size: 18px;
+    }
+    
+    .certificate p {
+      font-size: 13px;
+    }
+  }
+  
+  @media (max-height: 750px) {
+    #characterArea {
+      height: 90px;
+    }
+    
+    #character {
+      font-size: 55px;
+    }
+    
+    #question {
+      font-size: 14px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+    
+    #answers {
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .answer-btn {
+      padding: 9px;
+      font-size: 13px;
+    }
+    
+    #feedback {
+      padding: 10px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    
+    #achievements {
+      margin-top: 12px;
+    }
+    
+    .achievement {
+      width: 30px;
+      height: 30px;
+      font-size: 14px;
+    }
+  }
+</style>
 </head>
-
 <body>
-    <div id="container">
-        <h2>Acesse o jogo pelo QR Code</h2>
-
-        <div id="qrcode" style="margin: 20px auto;"></div>
-
-        <button id="enter-btn" onclick="entrar()">Entrar no Jogo</button>
+<div id="game">
+  <div class="level-indicator">Nível <span id="currentLevel">1</span></div>
+  <div class="mode-indicator mode1-indicator" id="modeIndicator" style="display: none;">Modo 1</div>
+  <div class="streak-badge" id="streakBadge">🔥 Seq: <span id="streakCount">0</span></div>
+  
+  <div id="welcomeMessage">
+    <h1>🎮 Bem-vindo ao Jogo ITIL & Metodologias em Projetos de T.I.</h1>
+    <p>Teste seus conhecimentos e habilidades para gerenciar projetos de TI com excelência!</p>
+  </div>
+  
+  <div id="characterArea">
+    <div id="character">🧑‍💻</div>
+  </div>
+  
+  <div id="stats">
+    <div class="stat-item" id="score">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Pontos</div>
     </div>
+    <div class="stat-item" id="lives">
+      <div class="stat-value" id="hearts">❤️❤️❤️</div>
+      <div class="stat-label">Vidas</div>
+    </div>
+    <div class="stat-item" id="timer">
+      <div class="stat-value" id="timeLeft">20</div>
+      <div class="stat-label">Segundos</div>
+    </div>
+    <div class="stat-item" id="streak">
+      <div class="stat-value" id="streakValue">0</div>
+      <div class="stat-label">Sequência</div>
+    </div>
+  </div>
+  
+  <div id="progressBar">
+    <div id="progress"></div>
+  </div>
+  
+  <div id="modeProgress" class="mode-progress" style="display: none;"></div>
+  
+  <h2 id="title">Escolha o Modo do Jogo</h2>
+  
+  <div id="story-narrative"></div>
+  
+  <div id="question">Selecione um modo para começar sua jornada na gestão de projetos de TI!</div>
+  
+  <div id="modeSelection">
+    <div class="mode-option mode1-option" onclick="selectMode(1)">
+      🧠 MODO 1 - Desafio de Conhecimento
+      <div class="mode-description">Teste seus conhecimentos teóricos sobre ITIL, Scrum e Kanban. Avance de nível após completar as 3 perguntas de cada nível!</div>
+    </div>
+    <div class="mode-option mode2-option" onclick="selectMode(2)">
+      🏢 MODO 2 - Simulação Real de Empresa
+      <div class="mode-description">Enfrente situações reais de uma empresa. Tome decisões que afetam o projeto e a equipe!</div>
+    </div>
+  </div>
+  
+  <div id="difficultySelection">
+    <h3>Escolha o Nível de Dificuldade:</h3>
+    <div class="difficulty-option easy-option" onclick="selectDifficulty('easy')">
+      🟢 FÁCIL
+      <div class="difficulty-description">Conceitos básicos de ITIL e Ágil</div>
+    </div>
+    <div class="difficulty-option medium-option" onclick="selectDifficulty('medium')">
+      🟡 MÉDIO
+      <div class="difficulty-description">Boas práticas e casos reais</div>
+    </div>
+    <div class="difficulty-option hard-option" onclick="selectDifficulty('hard')">
+      🔴 DIFÍCIL
+      <div class="difficulty-description">Cenários Complexos</div>
+    </div>
+  </div>
+  
+  <div id="answers"></div>
+  
+  <div id="feedback"></div>
+  
+  <button id="startBtn" onclick="startGame()" style="display: none;">🎮 Iniciar Jogo</button>
+  <button id="difficultyBtn" onclick="showDifficultySelection()" style="display: none;">📊 Alterar Dificuldade</button>
+  <button id="modeBtn" onclick="showModeSelection()" style="display: none;">🔄 Trocar Modo</button>
+  <button id="backToModeBtn" onclick="backToModeSelection()" style="display: none;">⬅️ Voltar aos Modos</button>
+  <button id="nextBtn" onclick="nextQuestion()" style="display: none;">⏭️ Próxima</button>
+  <button id="reviewBtn" onclick="showReview()" style="display: none;">📚 Revisar</button>
+  
+  <div id="achievements">
+    <div class="achievement" id="ach1">🚀<div class="achievement-tooltip">Iniciante Ágil</div></div>
+    <div class="achievement" id="ach2">⭐<div class="achievement-tooltip">Especialista Kanban</div></div>
+    <div class="achievement" id="ach3">🏆<div class="achievement-tooltip">Mestre Scrum</div></div>
+    <div class="achievement" id="ach4">💡<div class="achievement-tooltip">Sábio ITIL</div></div>
+    <div class="achievement" id="ach5">👑<div class="achievement-tooltip">Líder de Projetos</div></div>
+  </div>
+  
+  <div id="certificate" class="certificate">
+    <h3>🎓 Certificado</h3>
+    <p>Parabéns por completar o Game ITIL & Ágeis!</p>
+    <div class="stars" id="certificateStars"></div>
+    <p id="certificateMessage"></p>
+    <div class="final-message" id="finalMessage"></div>
+    <p>Você está cada vez mais preparado para gerenciar projetos!</p>
+  </div>
+  
+  <!-- Elemento de áudio para contagem regressiva -->
+  <audio id="countdownSound" class="countdown-sound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" type="audio/mpeg">
+  </audio>
+  
+  <!-- Elemento de áudio para tempo esgotado -->
+  <audio id="timeoutSound" class="countdown-sound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" type="audio/mpeg">
+  </audio>
+</div>
 
-    <script>
-        const gameURL = "jogo.html"; 
+<script>
+const characters = ["🧑‍💻", "🧑‍🔧", "🧑‍🏫", "🧑‍🚀", "🧙‍♂️", "🦸", "🧑‍💼", "👨‍🚒"];
+let level = 0;
+let questionIndex = 0;
+let score = 0;
+let lives = 3;
+let streak = 0;
+let timer;
+let timeLeft = 20;
+let gameStarted = false;
+let wrongAnswers = [];
+let currentDifficulty = 'medium';
+let currentMode = 0; // 0 = não selecionado, 1 = Desafio, 2 = Simulação
+let correctInLevel = 0; // Contador de acertos no nível atual (para Modo 1)
+let storyChapter = 0;
+let countdownSoundPlaying = false;
+let countdownStarted = false;
+let currentQuestionData = null;
 
-        new QRCode(document.getElementById("qrcode"), {
-            text: gameURL,
-            width: 220,
-            height: 220
-        });
+// Configurações atualizadas
+const difficultySettings = {
+  easy: { time: 25, points: 5, lives: 3 },
+  medium: { time: 20, points: 8, lives: 3 },
+  hard: { time: 15, points: 10, lives: 3 }
+};
 
-        function entrar() {
-            window.location.href = gameURL;
+const storyNarratives = {
+  1: [
+    "🎯 MODO DESAFIO: Nível 1 - Teste seus conhecimentos básicos sobre ITIL e métodos ágeis.",
+    "🎯 MODO DESAFIO: Nível 2 - Conceitos intermediários sobre gestão de serviços e projetos.",
+    "🎯 MODO DESAFIO: Nível 3 - Situações avançadas de tomada de decisão em TI."
+  ],
+  2: [
+    "🏢 SIMULAÇÃO REAL: Dia 1 - Você foi contratado como Analista de Service Desk. Seu primeiro desafio é entender os processos de incidentes.",
+    "🏢 SIMULAÇÃO REAL: Semana 2 - Um problema crítico afeta o sistema financeiro. Como você vai priorizar as ações?",
+    "🏢 SIMULAÇÃO REAL: Mês 1 - Promovido a Coordenador de TI. Agora precisa gerenciar mudanças e implementar práticas ágeis."
+  ]
+};
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Modo 1: Desafio de Conhecimento (avança após 3 perguntas)
+const mode1Levels = {
+  easy: [
+    {
+      title: "Fundamentos Básicos",
+      questions: [
+        { 
+          q: "O que significa ITIL?", 
+          a: [
+            "Information Technology Infrastructure Library", 
+            "Internet Technology Infrastructure Library", 
+            "International Technology Information Language"
+          ], 
+          c: 0,
+          explanation: "ITIL significa Information Technology Infrastructure Library. É um framework de boas práticas para gerenciamento de serviços de TI.",
+          learning: "ITIL ajuda a alinhar serviços de TI com necessidades de negócios através de processos padronizados."
+        },
+        { 
+          q: "Qual é o principal objetivo do Scrum?", 
+          a: [
+            "Entregar valor em ciclos curtos (Sprints)", 
+            "Documentação extensa de processos", 
+            "Controlar rigidamente o cronograma do projeto"
+          ], 
+          c: 0,
+          explanation: "Scrum visa entregar valor incremental em ciclos curtos chamados Sprints, permitindo adaptação constante.",
+          learning: "Scrum promove transparência, inspeção e adaptação através de eventos como Daily Scrum e Sprint Review."
+        },
+        { 
+          q: "O que é um 'Incidente' no ITIL?", 
+          a: [
+            "Uma interrupção não planejada de um serviço", 
+            "Uma mudança planejada no sistema", 
+            "Um novo recurso solicitado pelos usuários"
+          ], 
+          c: 0,
+          explanation: "Incidente é qualquer interrupção não planejada de um serviço ou redução na qualidade do serviço.",
+          learning: "O Gerenciamento de Incidentes visa restaurar a operação normal do serviço o mais rápido possível."
         }
-    </script>
+      ]
+    },
+    {
+      title: "Conceitos Intermediários",
+      questions: [
+        { 
+          q: "Quem é o Product Owner no Scrum?", 
+          a: [
+            "O representante dos stakeholders e dono do produto", 
+            "O gerente do projeto", 
+            "O líder técnico da equipe"
+          ], 
+          c: 0,
+          explanation: "O Product Owner representa os stakeholders e é responsável por maximizar o valor do produto.",
+          learning: "O PO gerencia o Product Backlog, priorizando itens baseados no valor de negócio."
+        },
+        { 
+          q: "O Manifesto Ágil foi criado em que ano?", 
+          a: ["2001", "1999", "2010"], 
+          c: 0,
+          explanation: "O Manifesto Ágil foi criado em 2001 por 17 profissionais de software que se reuniram para discutir métodos de desenvolvimento leves.",
+          learning: "O Manifesto Ágil valoriza: Indivíduos e interações, Software funcionando, Colaboração com o cliente, Responder a mudanças."
+        },
+        { 
+          q: "Quem criou o Kanban?", 
+          a: ["Taiichi Ohno (Toyota)", "Ken Schwaber", "Jeff Sutherland"], 
+          c: 0,
+          explanation: "Taiichi Ohno, um engenheiro da Toyota, desenvolveu o Kanban na década de 1940 como um sistema de controle de produção.",
+          learning: "Kanban significa 'cartão' ou 'sinalização' em japonês e foi adaptado para desenvolvimento de software por David J. Anderson."
+        }
+      ]
+    },
+    {
+      title: "Tomada de Decisão",
+      questions: [
+        { 
+          q: "Como Gerente de Serviços, você precisa reduzir custos em 20%. Qual abordagem ITIL priorizaria?", 
+          a: [
+            "Cortar serviços menos críticos identificados pelo Catálogo de Serviços", 
+            "Reduzir pessoal do Service Desk imediatamente", 
+            "Adiar todas as mudanças planejadas sem análise"
+          ], 
+          c: 0,
+          explanation: "O Catálogo de Serviços permite identificar serviços por valor de negócio, facilitando cortes estratégicos.",
+          learning: "ITIL ajuda a tomar decisões baseadas no valor do negócio, não apenas em custos operacionais."
+        },
+        { 
+          q: "Um problema recorrente afeta um serviço crítico. A solução permanente levará 3 meses. O que fazer enquanto isso?", 
+          a: [
+            "Implementar workaround e comunicar aos usuários", 
+            "Ignorar até a solução permanente", 
+            "Desativar o serviço completamente"
+          ], 
+          c: 0,
+          explanation: "Workarounds temporários podem mitigar impactos enquanto a solução permanente é desenvolvida.",
+          learning: "Gerenciamento de Problemas visa encontrar causa raiz, mas workarounds são aceitáveis para reduzir impacto."
+        },
+        { 
+          q: "Dois departamentos pedem funcionalidades conflitantes. Como Product Owner, como prioriza?", 
+          a: [
+            "Baseado no ROI e alinhamento estratégico", 
+            "Quem pediu primeiro", 
+            "O departamento com maior poder hierárquico"
+          ], 
+          c: 0,
+          explanation: "Decisões devem ser baseadas em valor de negócio (ROI) e alinhamento com objetivos estratégicos.",
+          learning: "O Product Owner deve balancear necessidades de múltiplos stakeholders com a visão do produto."
+        }
+      ]
+    }
+  ],
+  medium: [
+    {
+      title: "Boas Práticas",
+      questions: [
+        { 
+          q: "Um serviço crítico caiu. Qual processo do ITIL deve ser acionado primeiro?", 
+          a: [
+            "Gerenciamento de Incidentes", 
+            "Gerenciamento de Mudanças", 
+            "Gerenciamento de Capacidade"
+          ], 
+          c: 0,
+          explanation: "O Gerenciamento de Incidentes deve ser acionado primeiro para restaurar o serviço o mais rápido possível.",
+          learning: "Após restaurar o serviço, investigue a causa raiz através do Gerenciamento de Problemas."
+        },
+        { 
+          q: "Sua equipe Scrum está atrasando entregas. O que você analisaria primeiro?", 
+          a: [
+            "Revisar a capacidade da equipe e tamanho das histórias", 
+            "Aumentar a duração das Sprints", 
+            "Contratar mais desenvolvedores imediatamente"
+          ], 
+          c: 0,
+          explanation: "O primeiro passo é revisar a capacidade da equipe e o tamanho das histórias para garantir que são realistas.",
+          learning: "Scrum promove inspeção e adaptação. Use a Retrospectiva para identificar e resolver impedimentos."
+        },
+        { 
+          q: "Um usuário relata lentidão no sistema. Isso é considerado:", 
+          a: [
+            "Um incidente", 
+            "Uma mudança", 
+            "Um problema"
+          ], 
+          c: 0,
+          explanation: "Qualquer redução na qualidade do serviço é considerada um incidente no ITIL.",
+          learning: "Incidentes podem ser classificados por impacto e urgência para priorização adequada."
+        }
+      ]
+    },
+    {
+      title: "Integração de Metodologias",
+      questions: [
+        { 
+          q: "Como integrar ITIL com DevOps?", 
+          a: [
+            "Usar ITIL para governança e DevOps para entrega contínua", 
+            "Substituir ITIL completamente por DevOps", 
+            "Manter as equipes separadas sem integração"
+          ], 
+          c: 0,
+          explanation: "ITIL fornece governança e estrutura, enquanto DevOps foca na entrega rápida e automação.",
+          learning: "A combinação ITIL+DevOps cria um ambiente controlado mas ágil."
+        },
+        { 
+          q: "Qual prática do Scrum pode ser usada com Kanban?", 
+          a: [
+            "Reuniões diárias (Daily Stand-up)", 
+            "Sprints fixas de 2 semanas", 
+            "Planning Poker obrigatório"
+          ], 
+          c: 0,
+          explanation: "As reuniões diárias são úteis em qualquer metodologia ágil, incluindo Kanban.",
+          learning: "Kanban é mais flexível quanto a ciclos de entrega, mas mantém a comunicação diária."
+        },
+        { 
+          q: "Como o ITIL v4 aborda métodos ágeis?", 
+          a: [
+            "Inclui práticas ágeis como parte do framework", 
+            "Rejeita completamente métodos ágeis", 
+            "Recomenda apenas metodologias tradicionais"
+          ], 
+          c: 0,
+          explanation: "ITIL v4 incorpora práticas ágeis e DevOps em sua estrutura.",
+          learning: "ITIL evoluiu para se adaptar aos novos paradigmas de entrega de TI."
+        }
+      ]
+    },
+    {
+      title: "Gestão Avançada",
+      questions: [
+        { 
+          q: "Como medir o ROI de práticas ITIL?", 
+          a: [
+            "Redução de tempo de inatividade e aumento da satisfação", 
+            "Número de certificações da equipe", 
+            "Quantidade de documentação produzida"
+          ], 
+          c: 0,
+          explanation: "O ROI do ITIL é medito por métricas de negócio como disponibilidade e satisfação do cliente.",
+          learning: "ITIL deve demonstrar valor tangível para o negócio."
+        },
+        { 
+          q: "Qual é o papel do Scrum Master?", 
+          a: [
+            "Facilitar o processo Scrum e remover impedimentos", 
+            "Gerenciar o cronograma do projeto", 
+            "Tomar decisões técnicas pela equipe"
+          ], 
+          c: 0,
+          explanation: "O Scrum Master é um líder servidor que remove impedimentos e garante que o Scrum seja seguido.",
+          learning: "Scrum Master não é gerente de projeto, mas facilitador do processo."
+        },
+        { 
+          q: "Como priorizar mudanças no ITIL?", 
+          a: [
+            "Baseado no impacto e urgência", 
+            "Por ordem de chegada", 
+            "Pelo cargo de quem solicitou"
+          ], 
+          c: 0,
+          explanation: "Mudanças são priorizadas com base em impacto no negócio e urgência da implementação.",
+          learning: "O Comitê de Avaliação de Mudanças (CAB) ajuda nessa priorização."
+        }
+      ]
+    }
+  ],
+  hard: [
+    {
+      title: "Cenários Complexos",
+      questions: [
+        { 
+          q: "Como Gerente de TI, você descobre uma vulnerabilidade crítica. O patch levará 48h para ser testado. O que fazer?", 
+          a: [
+            "Aplicar processo de mudança emergencial com avaliação de risco", 
+            "Aplicar o patch imediatamente em produção", 
+            "Esperar o ciclo normal de mudanças (5 dias)"
+          ], 
+          c: 0,
+          explanation: "Mudanças emergenciais têm um processo acelerado mas ainda requerem avaliação e autorização apropriadas.",
+          learning: "Mesmo em emergências, é importante seguir processos controlados para minimizar riscos."
+        },
+        { 
+          q: "A empresa sofre um ataque de ransomware. Qual processo do ITIL deve ser acionado primeiro?", 
+          a: [
+            "Gerenciamento de Incidentes com ativação do plano de continuidade", 
+            "Gerenciamento de Mudanças", 
+            "Gerenciamento de Problemas"
+          ], 
+          c: 0,
+          explanation: "Em um ataque de ransomware, é crítico acionar o gerenciamento de incidentes e o plano de continuidade de negócios.",
+          learning: "ITIL tem processos de gerenciamento de continuidade de serviços para lidar com desastres."
+        },
+        { 
+          q: "Dois projetos estratégicos competem por recursos limitados. Como decidir?", 
+          a: [
+            "Usar análise de valor de negócio e portfólio de serviços", 
+            "Escolher o projeto do patrocinador mais alto", 
+            "Dividir recursos igualmente, mesmo que ambos falhem"
+          ], 
+          c: 0,
+          explanation: "O portfólio de serviços no ITIL ajuda a priorizar investimentos com base no valor de negócio.",
+          learning: "Decisões de portfólio devem ser tomadas com base em dados objetivos de retorno e alinhamento estratégico."
+        }
+      ]
+    },
+    {
+      title: "Transformação Digital",
+      questions: [
+        { 
+          q: "Como liderar uma transformação digital usando ITIL e ágil?", 
+          a: [
+            "Usar ITIL para governança e ágil para execução iterativa", 
+            "Focar apenas em tecnologia nova", 
+            "Contratar consultores externos para tomar todas as decisões"
+          ], 
+          c: 0,
+          explanation: "A combinação de governança (ITIL) e execução ágil é ideal para transformações digitais.",
+          learning: "Transformação requer tanto estrutura quanto flexibilidade."
+        },
+        { 
+          q: "Qual métrica é mais importante em DevOps?", 
+          a: [
+            "Tempo entre commit e produção (Lead Time)", 
+            "Número de reuniões realizadas", 
+            "Quantidade de código escrito"
+          ], 
+          c: 0,
+          explanation: "O Lead Time mede a eficiência do pipeline de entrega contínua.",
+          learning: "DevOps busca reduzir o tempo entre ideia e entrega de valor."
+        },
+        { 
+          q: "Como alinhar TI com objetivos de negócio?", 
+          a: [
+            "Usar balanced scorecard e indicadores-chave de desempenho", 
+            "Focar apenas em reduzir custos de TI", 
+            "Delegar completamente para a diretoria"
+          ], 
+          c: 0,
+          explanation: "Indicadores alinhados com negócio mostram o valor real da TI.",
+          learning: "TI deve falar a linguagem do negócio, não apenas a técnica."
+        }
+      ]
+    },
+    {
+      title: "Liderança Estratégica",
+      questions: [
+        { 
+          q: "Como convencer a diretoria a investir em ITIL?", 
+          a: [
+            "Mostrar ROI através de casos de negócio", 
+            "Falar sobre certificações internacionais", 
+            "Ameaçar com riscos de segurança"
+          ], 
+          c: 0,
+          explanation: "A diretoria responde a argumentos de negócio, não técnicos.",
+          learning: "Business cases devem mostrar benefícios tangíveis em receita ou redução de custos."
+        },
+        { 
+          q: "Qual o papel do CIO na era ágil?", 
+          a: [
+            "Líder de transformação e habilitador de negócios", 
+            "Apenas gestor de infraestrutura", 
+            "Controlador de custos"
+          ], 
+          c: 0,
+          explanation: "O CIO moderno é um estrategista que usa TI para habilitar negócios.",
+          learning: "TI deixou de ser custo para ser investimento estratégico."
+        },
+        { 
+          q: "Como gerenciar equipes distribuídas com Scrum?", 
+          a: [
+            "Usar ferramentas de colaboração e ajustar cerimônias", 
+            "Forçar presencialidade", 
+            "Abandonar Scrum por métodos tradicionais"
+          ], 
+          c: 0,
+          explanation: "Scrum pode ser adaptado para times distribuídos com as ferramentas certas.",
+          learning: "A comunicação é ainda mais crítica em times remotos."
+        }
+      ]
+    }
+  ]
+};
+
+// Modo 2: Simulação Real de Empresa (também 3 perguntas por nível)
+const mode2Levels = {
+  easy: [
+    {
+      title: "FASE 1 - Service Desk",
+      questions: [
+        { 
+          q: "📞 Seu primeiro dia como Analista de Service Desk. Um usuário relata que não consegue acessar o sistema financeiro. Como você procede?", 
+          a: [
+            "Classificar como incidente crítico e acionar o procedimento de priorização", 
+            "Pedir para o usuário tentar novamente amanhã", 
+            "Enviar um e-mail para o departamento de TI e aguardar"
+          ], 
+          c: 0,
+          explanation: "Sistemas financeiros são geralmente críticos para o negócio. Incidentes críticos devem ter tratamento prioritário.",
+          learning: "ITIL classifica incidentes por impacto (extensão do prejuízo) e urgência (quanto tempo pode esperar)."
+        },
+        { 
+          q: "🔄 Você recebe 3 chamados simultâneos: 1) Impressora não funciona, 2) Sistema de vendas lento, 3) CEO sem acesso ao e-mail. Como prioriza?", 
+          a: [
+            "CEO sem e-mail (alto impacto), Sistema de vendas (médio), Impressora (baixo)", 
+            "Por ordem de chegada: Impressora, Sistema, CEO", 
+            "Atender o mais rápido primeiro, independente do cargo"
+          ], 
+          c: 0,
+          explanation: "Priorização considera impacto no negócio. CEO sem e-mail pode afetar decisões importantes, sistema de vendas afeta receita.",
+          learning: "Matriz de priorização ITIL: Urgência (tempo para resolver) x Impacto (extensão da interrupção)."
+        },
+        { 
+          q: "📊 Após 1 semana, você nota que 40% dos incidentes são sobre a mesma impressora. Qual ação tomar?", 
+          a: [
+            "Abrir um problema (Problem) para investigar a causa raiz", 
+            "Continuar resolvendo um por um como incidentes", 
+            "Sugerir compra de uma nova impressora sem análise"
+          ], 
+          c: 0,
+          explanation: "Múltiplos incidentes relacionados indicam um problema subjacente que precisa de investigação da causa raiz.",
+          learning: "Gerenciamento de Problemas visa identificar e resolver causas raiz de incidentes recorrentes."
+        }
+      ]
+    },
+    {
+      title: "FASE 2 - Coordenação de TI",
+      questions: [
+        { 
+          q: "📈 Promovido a Coordenador! Precisa melhorar a entrega de projetos. Qual metodologia escolher para um projeto com requisitos incertos?", 
+          a: [
+            "Scrum, por ser iterativo e adaptativo", 
+            "Cascata (Waterfall), por ser mais controlado", 
+            "Não usar nenhuma metodologia, só começar a desenvolver"
+          ], 
+          c: 0,
+          explanation: "Scrum é ideal para projetos com requisitos que podem mudar, permitindo adaptação a cada sprint.",
+          learning: "Métodos ágeis como Scrum são recomendados quando os requisitos não são totalmente conhecidos no início."
+        },
+        { 
+          q: "🛠️ A equipe tem dificuldade com múltiplas tarefas. Como visualizar e limitar o trabalho em progresso?", 
+          a: [
+            "Implementar quadro Kanban com limites de WIP", 
+            "Criar uma planilha Excel com todas as tarefas", 
+            "Pedir para cada membro focar em apenas uma tarefa por vez"
+          ], 
+          c: 0,
+          explanation: "Kanban usa visualização do fluxo e limites de Work In Progress (WIP) para melhorar a eficiência.",
+          learning: "Limitar WIP ajuda a reduzir multitasking, aumentar o foco e identificar gargalos no processo."
+        },
+        { 
+          q: "💼 Dois projetos importantes competem por recursos. Como decidir qual priorizar?", 
+          a: [
+            "Analisar valor de negócio, ROI e alinhamento estratégico", 
+            "Priorizar o projeto do gerente mais alto na hierarquia", 
+            "Dividir recursos igualmente entre os dois projetos"
+          ], 
+          c: 0,
+          explanation: "Decisões de priorização devem ser baseadas no valor para o negócio, não em influências políticas.",
+          learning: "Portfólio de serviços no ITIL ajuda a gerenciar investimentos em TI baseados no valor de negócio."
+        }
+      ]
+    },
+    {
+      title: "FASE 3 - Gerência de TI",
+      questions: [
+        { 
+          q: "🏢 Como novo Gerente de TI, precisa alinhar TI com negócios. Qual framework ITIL ajuda nisso?", 
+          a: [
+            "Estratégia de Serviço (Service Strategy)", 
+            "Operação de Serviço (Service Operation)", 
+            "Transição de Serviço (Service Transition)"
+          ], 
+          c: 0,
+          explanation: "A Estratégia de Serviço no ITIL foca em alinhar serviços de TI com necessidades de negócio.",
+          learning: "ITIL v3 tem 5 fases: Estratégia, Desenho, Transição, Operação e Melhoria Continua."
+        },
+        { 
+          q: "💰 Precisa justificar investimento em TI para a diretoria. Qual métrica é mais relevante?", 
+          a: [
+            "ROI (Retorno sobre Investimento) e valor de negócio", 
+            "Número de incidentes resolvidos", 
+            "Quantidade de horas trabalhadas"
+          ], 
+          c: 0,
+          explanation: "A diretoria se preocupa com impacto financeiro e valor para o negócio, não com métricas operacionais.",
+          learning: "Business Case no ITIL ajuda a justificar investimentos mostrando benefícios, custos e riscos."
+        },
+        { 
+          q: "🌐 A empresa expande internacionalmente. Como garantir consistência nos serviços globais?", 
+          a: [
+            "Padronizar processos baseados em ITIL e definir SLAs globais", 
+            "Deixar cada filial definir seus próprios processos", 
+            "Contratar consultores locais em cada país"
+          ], 
+          c: 0,
+          explanation: "Padronização baseada em boas práticas como ITIL garante consistência e qualidade independente da localização.",
+          learning: "ITIL pode ser adaptado para diferentes culturas e tamanhos de organização mantendo princípios fundamentais."
+        }
+      ]
+    }
+  ],
+  medium: [
+    {
+      title: "FASE 1 - Service Desk Avançado",
+      questions: [
+        { 
+          q: "📞 Primeiro dia como Analista: usuário não acessa sistema financeiro. Como proceder?", 
+          a: [
+            "Classificar como incidente crítico e priorizar", 
+            "Pedir para tentar novamente depois", 
+            "Enviar e-mail para TI e aguardar"
+          ], 
+          c: 0,
+          explanation: "Sistemas financeiros são críticos. Incidentes críticos têm tratamento prioritário no ITIL.",
+          learning: "Classificação adequada de incidentes é essencial para priorização eficiente."
+        },
+        { 
+          q: "🆘 Um incidente crítico ocorre às 18h. O procedimento diz para acionar o plantão, mas você sabe resolver. O que faz?", 
+          a: [
+            "Seguir o procedimento e acionar o plantão, documentando o que sabe", 
+            "Tentar resolver sozinho para não incomodar a equipe", 
+            "Deixar para o próximo dia útil"
+          ], 
+          c: 0,
+          explanation: "Procedimentos existem para garantir consistência e controle. Mesmo sabendo resolver, é importante seguir os processos estabelecidos.",
+          learning: "Controle de mudanças e processos bem definidos são fundamentais para a qualidade do serviço de TI."
+        },
+        { 
+          q: "👥 A equipe está sobrecarregada. O gerente pede sugestões para melhorar. Qual abordagem ITIL você sugere?", 
+          a: [
+            "Implementar catálogo de serviços e níveis de serviço (SLA)", 
+            "Contratar mais analistas imediatamente", 
+            "Reduzir o horário de atendimento para diminuir demanda"
+          ], 
+          c: 0,
+          explanation: "Catálogo de serviços e SLAs ajudam a gerenciar expectativas e priorizar demandas de forma estruturada.",
+          learning: "Acordos de Nível de Serviço (SLAs) definem o que será entregue, em que prazo e com qual qualidade."
+        }
+      ]
+    },
+    {
+      title: "FASE 2 - Coordenação de Projetos",
+      questions: [
+        { 
+          q: "🚨 Uma mudança urgente é solicitada para corrigir vulnerabilidade crítica. Qual processo seguir?", 
+          a: [
+            "Processo de mudança emergencial com CAB (Comitê de Avaliação) emergencial", 
+            "Processo normal de mudança (pode levar 5 dias)", 
+            "Implementar direto em produção por ser urgente"
+          ], 
+          c: 0,
+          explanation: "Mudanças emergenciais ainda precisam de avaliação, mesmo que em processo acelerado com CAB emergencial.",
+          learning: "ITIL define diferentes tipos de mudança: padrão, normal e emergencial, cada uma com seu fluxo apropriado."
+        },
+        { 
+          q: "📋 Stakeholders reclamam que não veem progresso nos projetos. Como melhorar a transparência?", 
+          a: [
+            "Implementar reuniões de revisão de sprint e relatórios de burndown", 
+            "Enviar relatórios semanais por e-mail", 
+            "Marcar reuniões mensais de atualização"
+          ], 
+          c: 0,
+          explanation: "Scrum tem eventos como Sprint Review que mostram progresso tangível a cada ciclo.",
+          learning: "Transparência é um dos três pilares do Scrum (juntamente com inspeção e adaptação)."
+        },
+        { 
+          q: "🤝 Implementação de DevOps encontra resistência cultural. Como abordar?", 
+          a: [
+            "Focar em colaboração, pequenas vitórias e mostrar benefícios", 
+            "Forçar a adoção com diretrizes rígidas", 
+            "Contratar nova equipe já familiar com DevOps"
+          ], 
+          c: 0,
+          explanation: "Mudanças culturais exigem tempo, comunicação e demonstração de valor. Pequenas vitórias ajudam a ganhar adesão.",
+          learning: "DevOps une desenvolvimento (Dev) e operações (Ops) promovendo colaboração, automação e entrega contínua."
+        }
+      ]
+    },
+    {
+      title: "FASE 3 - Gestão Estratégica",
+      questions: [
+        { 
+          q: "🎯 Após 1 ano, como medir o sucesso da transformação de TI?", 
+          a: [
+            "Satisfação do cliente, tempo de resolução, ROI de projetos", 
+            "Número de certificações da equipe", 
+            "Quantidade de servidores gerenciados"
+          ], 
+          c: 0,
+          explanation: "Sucesso em TI deve ser medido pelo valor entregue ao negócio, não apenas por métricas técnicas.",
+          learning: "ITIL enfatiza medição e melhoria contínua baseada em feedback e métricas de negócio."
+        },
+        { 
+          q: "🏢 Como Gerente de TI, descobre vulnerabilidade crítica. Patch testado em 48h. O que fazer?", 
+          a: [
+            "Aplicar mudança emergencial com avaliação de risco", 
+            "Aplicar patch imediatamente em produção", 
+            "Esperar ciclo normal de mudanças (5 dias)"
+          ], 
+          c: 0,
+          explanation: "Mudanças emergenciais ainda precisam de avaliação controlada, mesmo em situações críticas.",
+          learning: "Processos de mudança devem balancear agilidade e controle de riscos."
+        },
+        { 
+          q: "🌍 A empresa está crescendo rapidamente. Como escalar processos de TI?", 
+          a: [
+            "Padronizar processos baseados em ITIL e automatizar onde possível", 
+            "Contratar mais pessoas para fazer o mesmo processo", 
+            "Deixar cada departamento criar seus próprios processos"
+          ], 
+          c: 0,
+          explanation: "Padronização e automação são chaves para escalar processos de TI eficientemente.",
+          learning: "ITIL fornece processos padronizados que podem ser escalados com automação."
+        }
+      ]
+    }
+  ],
+  hard: [
+    {
+      title: "FASE 1 - Crise e Resposta",
+      questions: [
+        { 
+          q: "🔥 Sistema de produção cai durante horário de pico. Qual é sua primeira ação como Gerente?", 
+          a: [
+            "Ativar plano de recuperação de desastre e comunicar stakeholders", 
+            "Culpar a equipe de operações", 
+            "Esperar para ver se volta sozinho"
+          ], 
+          c: 0,
+          explanation: "Em crises, comunicação proativa e ativação de planos de contingência são essenciais.",
+          learning: "ITIL tem processos específicos para gerenciamento de continuidade de serviços."
+        },
+        { 
+          q: "💸 Budget cortado em 30%. Como realinhar serviços?", 
+          a: [
+            "Revisar catálogo de serviços e priorizar por valor de negócio", 
+            "Cortar serviços aleatoriamente", 
+            "Reduzir qualidade de todos os serviços igualmente"
+          ], 
+          c: 0,
+          explanation: "O catálogo de serviços permite tomar decisões baseadas no valor de negócio, não apenas em custos.",
+          learning: "ITIL ajuda a gerenciar serviços como um portfólio, permitindo cortes estratégicos."
+        },
+        { 
+          q: "👥 Equipe altamente desmotivada após mudança organizacional. Como lidar?", 
+          a: [
+            "Transparência total, escuta ativa e pequenas vitórias rápidas", 
+            "Ignorar e focar apenas em resultados", 
+            "Ameaçar demissões se performance não melhorar"
+          ], 
+          c: 0,
+          explanation: "Liderança em TI requer habilidades humanas além de técnicas.",
+          learning: "Times motivados entregam muito mais valor do que times desmotivados."
+        }
+      ]
+    },
+    {
+      title: "FASE 2 - Transformação Digital",
+      questions: [
+        { 
+          q: "🔄 Como liderar migração para nuvem mantendo conformidade?", 
+          a: [
+            "Faseada, com avaliação de risco e plano de transição", 
+            "Migrar tudo de uma vez para economizar", 
+            "Terceirizar completamente sem supervisão"
+          ], 
+          c: 0,
+          explanation: "Migrações para nuvem requerem planejamento cuidadoso e gerenciamento de mudanças.",
+          learning: "ITIL fornece estrutura para gerenciar mudanças complexas com mínimo de risco."
+        },
+        { 
+          q: "🤖 Como implementar IA/ML em processos de TI?", 
+          a: [
+            "Começar com casos de uso específicos e expandir gradualmente", 
+            "Implementar soluções complexas de uma vez", 
+            "Ignorar por ser muito complexo"
+          ], 
+          c: 0,
+          explanation: "IA/ML deve começar com problemas bem definidos que ofereçam valor claro.",
+          learning: "Inovação em TI deve ser incremental e baseada em valor de negócio."
+        },
+        { 
+          q: "🔒 Violação de dados ocorre. Qual é o protocolo ITIL a seguir?", 
+          a: [
+            "Ativar resposta a incidentes, notificar autoridades e investigar causa raiz", 
+            "Esconder o incidente para proteger a imagem", 
+            "Culpar um funcionário específico publicamente"
+          ], 
+          c: 0,
+          explanation: "Transparência e processo controlado são essenciais em violações de segurança.",
+          learning: "ITIL integra-se com frameworks de segurança como ISO 27001."
+        }
+      ]
+    },
+    {
+      title: "FASE 3 - Liderança Executiva",
+      questions: [
+        { 
+          q: "🎯 Como convencer o board a investir em transformação digital?", 
+          a: [
+            "Business case com ROI claro e benchmarking do setor", 
+            "Apresentar apenas features técnicas", 
+            "Usar medo de ficar para trás"
+          ], 
+          c: 0,
+          explanation: "Executivos respondem a argumentos de negócio, não técnicos.",
+          learning: "CIOs bem-sucedidos falam a linguagem do negócio."
+        },
+        { 
+          q: "🌐 Gerenciando equipes globais com fusão de culturas. Qual abordagem?", 
+          a: [
+            "Respeitar diferenças culturais enquanto mantém padrões de qualidade", 
+            "Forçar cultura corporativa única", 
+            "Delegar completamente para líderes locais"
+          ], 
+          c: 0,
+          explanation: "Liderança global requer sensibilidade cultural e adaptabilidade.",
+          learning: "Processos padronizados podem ser adaptados a contextos culturais diferentes."
+        },
+        { 
+          q: "🚀 Preparando a organização para o futuro. Qual é sua estratégia de inovação?", 
+          a: [
+            "Orçamento dedicado para P&D e parcerias estratégicas", 
+            "Manter status quo até ser forçado a mudar", 
+            "Copiar concorrentes sem análise própria"
+          ], 
+          c: 0,
+          explanation: "Inovação requer investimento intencional e cultura de experimentação.",
+          learning: "TI deve ser tanto operacional quanto inovadora para sustentar vantagem competitiva."
+        }
+      ]
+    }
+  ]
+};
+
+// Inicialização
+function initGame() {
+  document.getElementById("modeSelection").style.display = "block";
+  document.getElementById("difficultySelection").style.display = "none";
+  document.getElementById("startBtn").style.display = "none";
+  document.getElementById("modeBtn").style.display = "none";
+  document.getElementById("backToModeBtn").style.display = "none";
+  document.getElementById("characterArea").style.display = "block";
+  document.getElementById("stats").style.display = "none";
+  document.getElementById("progressBar").style.display = "none";
+  document.getElementById("modeProgress").style.display = "none";
+  document.getElementById("modeIndicator").style.display = "none";
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("reviewBtn").style.display = "none";
+  document.getElementById("certificate").style.display = "none";
+  document.getElementById("story-narrative").style.display = "none";
+  
+  document.getElementById("title").innerText = "Escolha o Modo do Jogo";
+  document.getElementById("question").innerText = "Selecione um modo para começar sua jornada na gestão de projetos de TI!";
+  
+  gameStarted = false;
+  currentMode = 0;
+  level = 0;
+  questionIndex = 0;
+  score = 0;
+  lives = 3;
+  streak = 0;
+  correctInLevel = 0;
+  wrongAnswers = [];
+  countdownStarted = false;
+  
+  updateAllStats();
+  updateCharacter();
+  
+  clearInterval(timer);
+  stopCountdownSound();
+}
+
+function selectMode(mode) {
+  currentMode = mode;
+  
+  // Atualizar indicador de modo
+  const modeIndicator = document.getElementById("modeIndicator");
+  modeIndicator.style.display = "block";
+  modeIndicator.className = `mode-indicator mode${mode}-indicator`;
+  modeIndicator.innerText = mode === 1 ? "MODO DESAFIO" : "MODO SIMULAÇÃO";
+  
+  // Mostrar seleção de dificuldade
+  document.getElementById("modeSelection").style.display = "none";
+  document.getElementById("difficultySelection").style.display = "block";
+  document.getElementById("backToModeBtn").style.display = "block";
+  
+  // Atualizar título
+  document.getElementById("title").innerText = mode === 1 ? "Desafio de Conhecimento" : "Simulação Real de Empresa";
+  
+  // Atualizar mensagem
+  const modeDescription = mode === 1 
+    ? "Teste seus conhecimentos sobre ITIL, Scrum e Kanban. Avance de nível após completar as 3 perguntas de cada nível!" 
+    : "Enfrente situações reais de uma empresa. Suas decisões afetam o projeto e a equipe!";
+  document.getElementById("question").innerHTML = `<strong>${modeDescription}</strong><br><br>Selecione a dificuldade:`;
+}
+
+function backToModeSelection() {
+  currentMode = 0;
+  document.getElementById("modeSelection").style.display = "block";
+  document.getElementById("difficultySelection").style.display = "none";
+  document.getElementById("modeIndicator").style.display = "none";
+  document.getElementById("backToModeBtn").style.display = "none";
+  document.getElementById("title").innerText = "Escolha o Modo do Jogo";
+  document.getElementById("question").innerText = "Selecione um modo para começar sua jornada na gestão de projetos de TI!";
+}
+
+function selectDifficulty(difficulty) {
+  currentDifficulty = difficulty;
+  document.getElementById("title").innerHTML = currentMode === 1 
+    ? `Desafio de Conhecimento - ${difficulty.toUpperCase()}` 
+    : `Simulação Real - ${difficulty.toUpperCase()}`;
+  
+  const settings = difficultySettings[difficulty];
+  timeLeft = settings.time;
+  document.getElementById("timeLeft").textContent = timeLeft;
+  
+  // Animar a seleção
+  const options = document.querySelectorAll('.difficulty-option');
+  options.forEach(opt => opt.style.transform = 'scale(1)');
+  event.currentTarget.style.transform = 'scale(1.05)';
+  
+  // Atualizar cor do indicador de nível
+  const levelIndicator = document.querySelector('.level-indicator');
+  if (difficulty === 'easy') {
+    levelIndicator.style.background = 'linear-gradient(to right, var(--easy), #22c55e)';
+  } else if (difficulty === 'medium') {
+    levelIndicator.style.background = 'linear-gradient(to right, var(--medium), #f59e0b)';
+  } else {
+    levelIndicator.style.background = 'linear-gradient(to right, var(--hard), #dc2626)';
+  }
+  
+  // Mostrar botão para iniciar
+  document.getElementById("startBtn").style.display = "block";
+  document.getElementById("difficultySelection").style.display = "none";
+}
+
+function startGame() {
+  level = 0;
+  questionIndex = 0;
+  score = 0;
+  lives = difficultySettings[currentDifficulty].lives;
+  streak = 0;
+  correctInLevel = 0;
+  gameStarted = true;
+  wrongAnswers = [];
+  countdownStarted = false;
+  
+  updateAllStats();
+  updateCharacter();
+  loadLevel();
+  moveCharacter(0);
+  updateProgressBar();
+  updateLevelIndicator();
+  updateModeProgress();
+  
+  document.getElementById("startBtn").style.display = "none";
+  document.getElementById("difficultyBtn").style.display = "block";
+  document.getElementById("modeBtn").style.display = "block";
+  document.getElementById("backToModeBtn").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("reviewBtn").style.display = "none";
+  document.getElementById("certificate").style.display = "none";
+  document.getElementById("difficultySelection").style.display = "none";
+  document.getElementById("modeSelection").style.display = "none";
+  
+  document.getElementById("stats").style.display = "flex";
+  document.getElementById("progressBar").style.display = "block";
+  document.getElementById("modeProgress").style.display = "flex";
+  
+  // Mostrar narrativa baseada no modo
+  document.getElementById("story-narrative").style.display = "block";
+  if (currentMode === 1 && storyNarratives[1] && storyNarratives[1][level]) {
+    document.getElementById("story-narrative").textContent = storyNarratives[1][level];
+  } else if (currentMode === 2 && storyNarratives[2] && storyNarratives[2][level]) {
+    document.getElementById("story-narrative").textContent = storyNarratives[2][level];
+  }
+  
+  startTimer();
+  showStreakBadge();
+}
+
+function updateModeProgress() {
+  const modeProgress = document.getElementById("modeProgress");
+  modeProgress.innerHTML = "";
+  
+  const totalLevels = currentMode === 1 
+    ? mode1Levels[currentDifficulty].length 
+    : mode2Levels[currentDifficulty].length;
+  
+  for (let i = 0; i < totalLevels; i++) {
+    const progressItem = document.createElement("div");
+    progressItem.className = "mode-progress-item";
+    
+    if (i < level) {
+      progressItem.classList.add("completed");
+      progressItem.innerHTML = "✓";
+    } else if (i === level) {
+      progressItem.classList.add("active");
+      progressItem.innerHTML = i + 1;
+    } else {
+      progressItem.innerHTML = i + 1;
+    }
+    
+    modeProgress.appendChild(progressItem);
+  }
+}
+
+function showModeSelection() {
+  if (confirm("Deseja realmente trocar de modo? O progresso atual será perdido.")) {
+    initGame();
+  }
+}
+
+function showDifficultySelection() {
+  document.getElementById("difficultySelection").style.display = "block";
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("question").innerHTML = "<strong>Selecione a nova dificuldade:</strong>";
+  document.getElementById("startBtn").style.display = "block";
+  document.getElementById("startBtn").innerText = "🎮 Continuar com Nova Dificuldade";
+  document.getElementById("difficultyBtn").style.display = "none";
+  document.getElementById("modeBtn").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  
+  clearInterval(timer);
+  gameStarted = false;
+  stopCountdownSound();
+}
+
+// CORREÇÃO: Função atualizada para mostrar corações corretamente
+function updateAllStats() {
+  document.getElementById("score").querySelector(".stat-value").innerText = score;
+  document.getElementById("streakValue").innerText = streak;
+  
+  let hearts = "";
+  const maxLives = difficultySettings[currentDifficulty].lives;
+  for (let i = 0; i < maxLives; i++) {
+    hearts += i < lives ? "❤️" : "🤍";
+  }
+  document.getElementById("hearts").innerHTML = hearts;
+  
+  // Desbloquear conquistas baseado na pontuação
+  if (score >= 50) unlockAchievement("ach1");
+  if (score >= 100) unlockAchievement("ach2");
+  if (score >= 150) unlockAchievement("ach3");
+  if (score >= 200) unlockAchievement("ach4");
+  if (score >= 250) unlockAchievement("ach5");
+  if (streak >= 5) unlockAchievement("ach1");
+  if (streak >= 10) unlockAchievement("ach2");
+  if (currentDifficulty === 'hard' && score >= 100) unlockAchievement("ach5");
+}
+
+function updateCharacter() {
+  document.getElementById("character").innerText = characters[level % characters.length];
+}
+
+function moveCharacter(progress) {
+  const char = document.getElementById("character");
+  char.style.left = (10 + progress * 80) + "%";
+}
+
+function updateProgressBar() {
+  let totalQuestions = 0;
+  let answeredQuestions = 0;
+  
+  if (currentMode === 1) {
+    const currentLevels = mode1Levels[currentDifficulty];
+    totalQuestions = currentLevels.reduce((total, lvl) => total + lvl.questions.length, 0);
+    answeredQuestions = currentLevels.slice(0, level).reduce((total, lvl) => total + lvl.questions.length, 0) + questionIndex;
+  } else {
+    const currentLevels = mode2Levels[currentDifficulty];
+    totalQuestions = currentLevels.reduce((total, lvl) => total + lvl.questions.length, 0);
+    answeredQuestions = currentLevels.slice(0, level).reduce((total, lvl) => total + lvl.questions.length, 0) + questionIndex;
+  }
+  
+  const progress = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+  document.getElementById("progress").style.width = progress + "%";
+}
+
+function updateLevelIndicator() {
+  document.getElementById("currentLevel").innerText = level + 1;
+}
+
+// CORREÇÃO: Função loadLevel aprimorada com verificações
+function loadLevel() {
+  let currentLevels;
+  let originalQuestion;
+  
+  if (currentMode === 1) {
+    currentLevels = mode1Levels[currentDifficulty];
+  } else {
+    currentLevels = mode2Levels[currentDifficulty];
+  }
+  
+  // Verificar se o nível existe
+  if (!currentLevels || currentLevels.length === 0) {
+    console.error("Nenhum nível encontrado para a dificuldade atual");
+    endGame();
+    return;
+  }
+  
+  // Verificar se o índice do nível é válido
+  if (level < 0 || level >= currentLevels.length) {
+    console.error("Índice de nível inválido:", level);
+    endGame();
+    return;
+  }
+  
+  const currentLevel = currentLevels[level];
+  
+  // Verificar se há perguntas neste nível
+  if (!currentLevel.questions || currentLevel.questions.length === 0) {
+    console.error("Nenhuma pergunta encontrada no nível", level);
+    endGame();
+    return;
+  }
+  
+  // Verificar se o índice da pergunta é válido
+  if (questionIndex < 0 || questionIndex >= currentLevel.questions.length) {
+    console.error("Índice de pergunta inválido:", questionIndex);
+    // Resetar para primeira pergunta
+    questionIndex = 0;
+  }
+  
+  originalQuestion = currentLevel.questions[questionIndex];
+  
+  // Criar uma cópia da pergunta para embaralhar as alternativas
+  const shuffledQuestion = {
+    q: originalQuestion.q,
+    a: [...originalQuestion.a],
+    c: originalQuestion.c,
+    explanation: originalQuestion.explanation,
+    learning: originalQuestion.learning
+  };
+  
+  const correctAnswerText = shuffledQuestion.a[shuffledQuestion.c];
+  shuffledQuestion.a = shuffleArray(shuffledQuestion.a);
+  shuffledQuestion.c = shuffledQuestion.a.indexOf(correctAnswerText);
+  
+  currentQuestionData = shuffledQuestion;
+  
+  document.getElementById("question").innerHTML = `
+    <div class="difficulty-tag ${currentDifficulty}-tag">${currentDifficulty.toUpperCase()}</div>
+    ${shuffledQuestion.q}
+  `;
+  
+  const ansDiv = document.getElementById("answers");
+  ansDiv.innerHTML = "";
+
+  shuffledQuestion.a.forEach((text, i) => {
+    const btn = document.createElement("button");
+    btn.innerText = text;
+    btn.className = "answer-btn";
+    btn.onclick = () => check(i);
+    ansDiv.appendChild(btn);
+  });
+  
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  
+  resetTimer();
+}
+
+// CORREÇÃO: Função para mostrar tela de fim de jogo quando as vidas acabam
+function showGameOverScreen() {
+  const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  let totalQuestionsInLevel = 0;
+  let questionsAnsweredInLevel = 0;
+  
+  if (currentLevels && currentLevels[level]) {
+    totalQuestionsInLevel = currentLevels[level].questions ? currentLevels[level].questions.length : 0;
+    questionsAnsweredInLevel = Math.min(questionIndex + 1, totalQuestionsInLevel);
+  }
+  
+  document.getElementById("title").innerHTML = "😔 Fim de Jogo";
+  document.getElementById("question").innerHTML = `
+    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #ff6b6b, #ff8e8e); border-radius: 10px; color: white;">
+      <h3 style="margin-bottom: 10px;">Suas vidas acabaram!</h3>
+      <p style="margin: 5px 0;">🎯 Nível atual: ${level + 1}</p>
+      <p style="margin: 5px 0;">❓ Perguntas respondidas: ${questionsAnsweredInLevel}</p>
+      <p style="margin: 5px 0;">⭐ Pontuação total: ${score} pontos</p>
+      <p style="margin: 5px 0;">🔥 Maior sequência: ${streak} acerto(s) seguidos</p>
+      <p style="margin-top: 15px; font-weight: bold;">Deseja tentar novamente?</p>
+    </div>
+  `;
+  
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("startBtn").style.display = "block";
+  document.getElementById("startBtn").innerText = "🔄 Tentar Novamente";
+  document.getElementById("difficultyBtn").style.display = "block";
+  document.getElementById("modeBtn").style.display = "block";
+  document.getElementById("reviewBtn").style.display = "block";
+  document.getElementById("certificate").style.display = "none";
+  
+  gameStarted = false;
+  clearInterval(timer);
+  stopCountdownSound();
+}
+
+// CORREÇÃO: Função check aprimorada
+function check(choice) {
+  if (!gameStarted || !currentQuestionData) return;
+  
+  clearInterval(timer);
+  stopCountdownSound();
+  const answerButtons = document.querySelectorAll(".answer-btn");
+  
+  answerButtons.forEach(btn => {
+    btn.onclick = null;
+    btn.style.pointerEvents = "none";
+  });
+  
+  const feedback = document.getElementById("feedback");
+  feedback.style.display = "block";
+  
+  const settings = difficultySettings[currentDifficulty];
+  
+  // CORREÇÃO: Calcular pontos antes de verificar a resposta
+  let pointsEarned = settings.points;
+  
+  if (choice === currentQuestionData.c) {
+    // Resposta correta
+    answerButtons[choice].classList.add("correct");
+    
+    // Bônus por sequência
+    if (streak > 0) {
+      pointsEarned += Math.floor(streak * 2);
+    }
+    
+    // CORREÇÃO: Pontuação mais justa
+    const difficultyMultiplier = currentDifficulty === 'easy' ? 1 : 
+                                currentDifficulty === 'medium' ? 1.5 : 2;
+    pointsEarned = Math.floor(pointsEarned * difficultyMultiplier);
+    
+    score += pointsEarned;
+    streak++;
+    correctInLevel++;
+    
+    updateAllStats();
+    playSound('correct');
+    
+    feedback.innerHTML = `<strong>🎉 Correto! +${pointsEarned} pontos</strong><br>${currentQuestionData.explanation}<br><br><strong>📚 Aprendizado:</strong> ${currentQuestionData.learning}`;
+    feedback.className = "correct";
+    
+    document.getElementById("character").classList.add("character-jump");
+    setTimeout(() => {
+      document.getElementById("character").classList.remove("character-jump");
+    }, 500);
+    
+  } else {
+    // Resposta incorreta
+    answerButtons[choice].classList.add("incorrect");
+    answerButtons[currentQuestionData.c].classList.add("correct");
+    lives--;
+    streak = 0;
+    updateAllStats();
+    playSound('incorrect');
+    
+    // Registrar resposta errada para revisão
+    let originalQuestion;
+    const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+    
+    if (currentLevels[level] && currentLevels[level].questions && currentLevels[level].questions[questionIndex]) {
+      originalQuestion = currentLevels[level].questions[questionIndex];
+      
+      wrongAnswers.push({
+        question: originalQuestion.q,
+        correctAnswer: originalQuestion.a[originalQuestion.c],
+        explanation: originalQuestion.explanation,
+        learning: originalQuestion.learning,
+        difficulty: currentDifficulty,
+        mode: currentMode,
+        userAnswer: currentQuestionData.a[choice]
+      });
+      
+      feedback.innerHTML = `<strong>❌ Incorreto! Resposta correta: ${originalQuestion.a[originalQuestion.c]}</strong><br>${originalQuestion.explanation}<br><br><strong>📚 Aprendizado:</strong> ${originalQuestion.learning}`;
+    } else {
+      feedback.innerHTML = "<strong>❌ Incorreto!</strong><br>Infelizmente, ocorreu um erro ao carregar os detalhes da questão.";
+    }
+    
+    feedback.className = "incorrect";
+    
+    document.getElementById("character").classList.add("character-sad");
+    setTimeout(() => {
+      document.getElementById("character").classList.remove("character-sad");
+    }, 600);
+  }
+  
+  // CORREÇÃO: Atualizar progresso do personagem
+  const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  if (currentLevels[level] && currentLevels[level].questions) {
+    const totalQuestionsInCurrentLevel = currentLevels[level].questions.length;
+    const progress = (questionIndex + 1) / totalQuestionsInCurrentLevel;
+    moveCharacter(progress);
+    updateProgressBar();
+  }
+  
+  updateStreakBadge();
+  
+  // CORREÇÃO: Verificar se as vidas acabaram
+  if (lives <= 0) {
+    setTimeout(showGameOverScreen, 1500);
+    return;
+  }
+  
+  // Determinar se é a última pergunta
+  const currentLevelsForCheck = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  let totalQuestionsInCurrentLevel = 3; // padrão
+  let isLastQuestionInLevel = false;
+  let isLastLevel = false;
+  
+  if (currentLevelsForCheck[level] && currentLevelsForCheck[level].questions) {
+    totalQuestionsInCurrentLevel = currentLevelsForCheck[level].questions.length;
+    isLastQuestionInLevel = (questionIndex + 1) >= totalQuestionsInCurrentLevel;
+    isLastLevel = (level + 1) >= currentLevelsForCheck.length;
+  }
+  
+  // Sempre mostrar o botão "Próxima"
+  document.getElementById("nextBtn").style.display = "block";
+  
+  if (isLastQuestionInLevel && isLastLevel) {
+    document.getElementById("nextBtn").innerText = "🏁 Ver Resultados Finais";
+  } else if (isLastQuestionInLevel) {
+    document.getElementById("nextBtn").innerText = "⏭️ Avançar para Próximo Nível";
+  } else {
+    document.getElementById("nextBtn").innerText = "⏭️ Próxima Pergunta";
+  }
+}
+
+function showStreakBadge() {
+  const badge = document.getElementById("streakBadge");
+  badge.style.display = streak > 1 ? "block" : "none";
+}
+
+function updateStreakBadge() {
+  const badge = document.getElementById("streakBadge");
+  const count = document.getElementById("streakCount");
+  
+  if (streak > 1) {
+    badge.style.display = "block";
+    count.textContent = streak;
+    
+    if (streak >= 10) {
+      badge.style.background = "linear-gradient(to right, #f59e0b, #fbbf24)";
+    } else if (streak >= 5) {
+      badge.style.background = "linear-gradient(to right, #10b981, #34d399)";
+    } else {
+      badge.style.background = "linear-gradient(to right, #3b82f6, #60a5fa)";
+    }
+  } else {
+    badge.style.display = "none";
+  }
+}
+
+function playCountdownSound() {
+  if (!countdownSoundPlaying) {
+    const countdownSound = document.getElementById("countdownSound");
+    countdownSound.volume = 0.3;
+    countdownSound.currentTime = 0;
+    countdownSound.play().catch(e => console.log("Erro ao tocar som de contagem:", e));
+    countdownSoundPlaying = true;
+    
+    setTimeout(() => {
+      stopCountdownSound();
+    }, 10000);
+  }
+}
+
+function stopCountdownSound() {
+  const countdownSound = document.getElementById("countdownSound");
+  countdownSound.pause();
+  countdownSound.currentTime = 0;
+  countdownSoundPlaying = false;
+  countdownStarted = false;
+}
+
+function playTimeoutSound() {
+  const timeoutSound = document.getElementById("timeoutSound");
+  timeoutSound.volume = 0.4;
+  timeoutSound.currentTime = 0;
+  timeoutSound.play().catch(e => console.log("Erro ao tocar som de tempo esgotado:", e));
+}
+
+// CORREÇÃO: Função nextQuestion mais robusta
+function nextQuestion() {
+  stopCountdownSound();
+  
+  // Incrementar índice da pergunta
+  questionIndex++;
+  
+  // Obter os níveis atuais
+  const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  
+  // CORREÇÃO: Verificar se o nível atual existe
+  if (!currentLevels || currentLevels.length === 0) {
+    endGame();
+    return;
+  }
+  
+  // CORREÇÃO: Verificar se ainda há perguntas no nível atual
+  if (questionIndex >= currentLevels[level].questions.length) {
+    // Avançar para o próximo nível
+    level++;
+    questionIndex = 0;
+    correctInLevel = 0;
+    
+    // Verificar se atingiu o último nível
+    if (level >= currentLevels.length) {
+      endGame();
+      return;
+    }
+    
+    // Atualizar interface para novo nível
+    updateCharacter();
+    moveCharacter(0);
+    updateProgressBar();
+    updateLevelIndicator();
+    updateModeProgress();
+    
+    // Atualizar narrativa
+    if (storyNarratives[currentMode] && storyNarratives[currentMode][level]) {
+      document.getElementById("story-narrative").textContent = storyNarratives[currentMode][level];
+    }
+  }
+  
+  // Carregar a próxima pergunta
+  loadLevel();
+  startTimer();
+}
+
+function startTimer() {
+  timeLeft = difficultySettings[currentDifficulty].time;
+  document.getElementById("timeLeft").textContent = timeLeft;
+  const timerElement = document.getElementById("timer").querySelector(".stat-value");
+  timerElement.classList.remove("timer-warning", "timer-critical");
+  
+  clearInterval(timer);
+  stopCountdownSound();
+  countdownStarted = false;
+  
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timeLeft").textContent = timeLeft;
+    
+    if (timeLeft <= 10 && !countdownStarted) {
+      playCountdownSound();
+      countdownStarted = true;
+    }
+    
+    if (timeLeft <= 10) {
+      timerElement.classList.add("timer-warning");
+    }
+    
+    if (timeLeft <= 5) {
+      timerElement.classList.remove("timer-warning");
+      timerElement.classList.add("timer-critical");
+      
+      if (!document.getElementById("character").classList.contains("character-thinking")) {
+        document.getElementById("character").classList.add("character-thinking");
+      }
+    }
+    
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      stopCountdownSound();
+      playTimeoutSound();
+      timeUp();
+    }
+  }, 1000);
+}
+
+function timeUp() {
+  if (!gameStarted || !currentQuestionData) return;
+  
+  const answerButtons = document.querySelectorAll(".answer-btn");
+  answerButtons.forEach(btn => {
+    btn.onclick = null;
+    btn.style.pointerEvents = "none";
+  });
+  
+  const feedback = document.getElementById("feedback");
+  feedback.style.display = "block";
+  feedback.innerHTML = "<strong>⏰ Tempo esgotado!</strong> Você perdeu uma vida.";
+  feedback.className = "incorrect";
+  
+  // Registrar como resposta errada
+  let originalQuestion;
+  const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  
+  if (currentLevels[level] && currentLevels[level].questions && currentLevels[level].questions[questionIndex]) {
+    originalQuestion = currentLevels[level].questions[questionIndex];
+    
+    wrongAnswers.push({
+      question: originalQuestion.q,
+      correctAnswer: originalQuestion.a[originalQuestion.c],
+      explanation: originalQuestion.explanation,
+      learning: originalQuestion.learning,
+      difficulty: currentDifficulty,
+      mode: currentMode,
+      reason: "Tempo esgotado"
+    });
+  }
+  
+  lives--;
+  streak = 0;
+  updateAllStats();
+  updateStreakBadge();
+  
+  answerButtons.forEach((btn, i) => {
+    if (i === currentQuestionData.c) {
+      btn.classList.add("correct");
+    }
+  });
+  
+  document.getElementById("character").classList.add("character-sad");
+  document.getElementById("character").classList.remove("character-thinking");
+  
+  // Mostrar botão "Próxima" após tempo esgotado
+  document.getElementById("nextBtn").style.display = "block";
+  
+  // Determinar o texto do botão
+  const currentLevelsForCheck = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  const totalQuestionsInCurrentLevel = currentLevelsForCheck[level].questions.length;
+  const isLastQuestionInLevel = (questionIndex + 1) >= totalQuestionsInCurrentLevel;
+  const isLastLevel = (level + 1) >= currentLevelsForCheck.length;
+  
+  if (isLastQuestionInLevel && isLastLevel) {
+    document.getElementById("nextBtn").innerText = "🏁 Ver Resultados Finais";
+  } else if (isLastQuestionInLevel) {
+    document.getElementById("nextBtn").innerText = "⏭️ Avançar para Próximo Nível";
+  } else {
+    document.getElementById("nextBtn").innerText = "⏭️ Próxima Pergunta";
+  }
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  stopCountdownSound();
+  timeLeft = difficultySettings[currentDifficulty].time;
+  document.getElementById("timeLeft").textContent = timeLeft;
+  const timerElement = document.getElementById("timer").querySelector(".stat-value");
+  timerElement.classList.remove("timer-warning", "timer-critical");
+  document.getElementById("character").classList.remove("character-thinking");
+  countdownStarted = false;
+}
+
+function endGame() {
+  gameStarted = false;
+  
+  const title = document.getElementById("title");
+  title.innerText = "FIM DO JOGO";
+  
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("startBtn").style.display = "block";
+  document.getElementById("startBtn").innerText = "🔄 Jogar Novamente";
+  document.getElementById("difficultyBtn").style.display = "block";
+  document.getElementById("modeBtn").style.display = "block";
+  document.getElementById("backToModeBtn").style.display = "block";
+  
+  if (wrongAnswers.length > 0) {
+    document.getElementById("reviewBtn").style.display = "block";
+  }
+  
+  moveCharacter(1);
+  clearInterval(timer);
+  stopCountdownSound();
+  document.getElementById("character").classList.remove("character-thinking", "character-sad");
+  
+  showCertificate();
+}
+
+// CORREÇÃO: Sistema de pontuação no certificado
+function showCertificate() {
+  const certificate = document.getElementById("certificate");
+  const starsElement = document.getElementById("certificateStars");
+  const certificateMessage = document.getElementById("certificateMessage");
+  const finalMessage = document.getElementById("finalMessage");
+  
+  certificate.style.display = "block";
+  
+  // Calcular pontuação máxima possível
+  let totalPossiblePoints = 0;
+  const currentLevels = currentMode === 1 ? mode1Levels[currentDifficulty] : mode2Levels[currentDifficulty];
+  
+  if (currentLevels) {
+    currentLevels.forEach(level => {
+      if (level.questions) {
+        // Cada pergunta vale pontos base + possíveis bônus
+        totalPossiblePoints += level.questions.length * difficultySettings[currentDifficulty].points * 2;
+      }
+    });
+  }
+  
+  // Se não conseguimos calcular, usar um valor padrão baseado na dificuldade
+  if (totalPossiblePoints === 0) {
+    totalPossiblePoints = currentDifficulty === 'easy' ? 150 : 
+                         currentDifficulty === 'medium' ? 240 : 300;
+  }
+  
+  const percentage = (score / totalPossiblePoints) * 100;
+  
+  let starCount = 0;
+  let stars = "";
+  
+  if (percentage >= 90) {
+    starCount = 5;
+    stars = "⭐⭐⭐⭐⭐";
+  } else if (percentage >= 70) {
+    starCount = 4;
+    stars = "⭐⭐⭐⭐";
+  } else if (percentage >= 50) {
+    starCount = 3;
+    stars = "⭐⭐⭐";
+  } else if (percentage >= 30) {
+    starCount = 2;
+    stars = "⭐⭐";
+  } else {
+    starCount = 1;
+    stars = "⭐";
+  }
+  
+  starsElement.innerHTML = stars;
+  
+  // Mensagens baseadas no desempenho
+  const messages = {
+    5: {
+      easy: "🎖️ Iniciante Ágil - Excelente domínio dos conceitos básicos!",
+      medium: "🎖️ Analista Pleno - Domínio excepcional das boas práticas!",
+      hard: "🎖️ Mestre em Gestão de TI - Excelência na tomada de decisões complexas!"
+    },
+    4: {
+      easy: "🥉 Assistente de TI - Bom conhecimento dos fundamentos!",
+      medium: "🥉 Coordenador de TI - Excelente compreensão das práticas intermediárias!",
+      hard: "🥉 Diretor de Tecnologia - Habilidade notável para lidar com situações críticas!"
+    },
+    3: {
+      easy: "🥈 Analista Júnior - Conhecimento satisfatório dos conceitos iniciais!",
+      medium: "🥈 Especialista em Boas Práticas - Bom conhecimento das boas práticas!",
+      hard: "🥈 Líder Estratégico - Boa capacidade de análise em cenários complexos!"
+    },
+    2: {
+      easy: "🥇 Especialista em Fundamentos - Conhecimento básico adquirido!",
+      medium: "🥇 Gerente de Projetos - Conhecimento intermediário adequado!",
+      hard: "🥇 Especialista em Cenários Complexos - Consegue enfrentar desafios complexos!"
+    },
+    1: {
+      easy: "🏅 Participante - Continue estudando para melhorar!",
+      medium: "🏅 Profissional em Formação - Continue se dedicando!",
+      hard: "🏅 Desafiador de Complexidades - Coragem para enfrentar cenários difíceis!"
+    }
+  };
+  
+  const difficultyText = currentDifficulty === 'easy' ? 'FÁCIL' : 
+                        currentDifficulty === 'medium' ? 'MÉDIO' : 'DIFÍCIL';
+  
+  certificateMessage.textContent = messages[starCount][currentDifficulty];
+  finalMessage.innerHTML = `<strong>Pontuação: ${score} pontos (${Math.round(percentage)}%)</strong><br>Dificuldade: ${difficultyText} | Modo: ${currentMode === 1 ? 'Desafio' : 'Simulação'}`;
+  
+  // Determinar classe baseada no desempenho
+  if (starCount >= 4) {
+    finalMessage.className = "final-message manager-ready";
+    playSound('victory');
+  } else if (starCount === 3) {
+    finalMessage.className = "final-message almost-ready";
+  } else {
+    finalMessage.className = "final-message needs-improvement";
+  }
+  
+  certificate.style.animation = "fadeIn 1s";
+}
+
+function showReview() {
+  document.getElementById("title").innerText = "📚 Revisão de Conteúdo";
+  document.getElementById("question").innerHTML = `<strong>Revise os conceitos que você errou (${wrongAnswers.length} questões):</strong>`;
+  
+  let reviewContent = "";
+  wrongAnswers.forEach((item, index) => {
+    const reason = item.reason ? `<br><em>Motivo: ${item.reason}</em>` : "";
+    const userAnswer = item.userAnswer ? `<br><em>Sua resposta: ${item.userAnswer}</em>` : "";
+    const modeText = item.mode === 1 ? "Desafio" : "Simulação";
+    reviewContent += `
+      <div style="margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #f72585; box-shadow: 0 3px 6px rgba(0,0,0,0.05);">
+        <p style="margin: 0 0 6px 0; font-size: 13px;"><strong>Pergunta ${index + 1} (${modeText} - ${item.difficulty.toUpperCase()}):</strong> ${item.question}</p>
+        <p style="margin: 0 0 6px 0; font-size: 13px;"><strong>✅ Correta:</strong> ${item.correctAnswer}</p>
+        <p style="margin: 0; font-size: 13px;"><strong>📖 Explicação:</strong> ${item.explanation}${userAnswer}${reason}</p>
+      </div>
+    `;
+  });
+  
+  document.getElementById("answers").innerHTML = reviewContent;
+  document.getElementById("reviewBtn").style.display = "none";
+  document.getElementById("feedback").style.display = "none";
+}
+
+function playSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    if (type === 'correct') {
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    } else if (type === 'incorrect') {
+      oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(196, audioContext.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    } else if (type === 'levelup') {
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+      oscillator.frequency.setValueAtTime(1046.5, audioContext.currentTime + 0.3);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.6);
+    } else if (type === 'victory') {
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+      oscillator.frequency.setValueAtTime(1046.5, audioContext.currentTime + 0.3);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 1);
+    }
+  } catch (e) {
+    console.log("Audio não suportado neste navegador");
+  }
+}
+
+function unlockAchievement(achievementId) {
+  const achievement = document.getElementById(achievementId);
+  if (!achievement.classList.contains("unlocked")) {
+    achievement.classList.add("unlocked");
+    
+    achievement.style.transform = "scale(1.15)";
+    setTimeout(() => {
+      achievement.style.transform = "scale(1.08)";
+    }, 300);
+    
+    const tooltip = achievement.querySelector('.achievement-tooltip');
+    const originalText = tooltip.textContent;
+    tooltip.textContent = `DESBLOQUEADO: ${originalText}`;
+    tooltip.style.bottom = "40px";
+    tooltip.style.opacity = "1";
+    tooltip.style.background = "linear-gradient(to right, #3a0ca3, #4361ee)";
+    
+    setTimeout(() => {
+      tooltip.textContent = originalText;
+      tooltip.style.bottom = "40px";
+      tooltip.style.background = "var(--dark)";
+    }, 2000);
+  }
+}
+
+// Inicializar o jogo
+initGame();
+document.getElementById("character").style.animation = "float 4s ease-in-out infinite";
+</script>
 </body>
 </html>
